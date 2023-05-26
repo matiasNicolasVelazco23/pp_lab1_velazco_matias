@@ -33,18 +33,24 @@ def imprimir_menu():
     "2. Seleccionar un jugador por su índice y mostrar sus estadísticas"
     "completas\n"
     "3. Guardar las estadísticas de ese jugador en un archivo CSV.\n" 
-    "4. Buscar un jugador por su nombre y mostrar sus logros\n"
-    "5. Calcular y mostrar el promedio de puntos por partido de todo el equipo"
-     " del Dream Team, ordenado por nombre de manera ascendente. \n"
+    #"4. Buscar un jugador por su nombre y mostrar sus logros\n"
+    #"5. Calcular y mostrar el promedio de puntos por partido de todo el equipo"
+    # " del Dream Team, ordenado por nombre de manera ascendente. \n"
+    #6.Permitir al usuario ingresar el nombre de un jugador y mostrar si ese jugador es miembro del Salón de la Fama del Baloncesto.
     "7. Calcular y mostrar el jugador con la mayor cantidad de rebotes totales.\n"
     "8- Calcular y mostrar el jugador con el mayor porcentaje de tiros de campo.\n"
     "9- Calcular y mostrar el jugador con la mayor cantidad de asistencias totales.\n"
     "10- Permitir al usuario ingresar un valor y mostrar los jugadores que han promediado más puntos por partido que ese valor.\n"
     "11- Permitir al usuario ingresar un valor y mostrar los jugadores que han promediado más rebotes por partido que ese valor.\n"
-    "12-Permitir al usuario ingresar un valor y mostrar los jugadores que han promediado más asistencias por partido que ese valor.\n"
+    "12- Permitir al usuario ingresar un valor y mostrar los jugadores que han promediado más asistencias por partido que ese valor.\n"
     "13- Calcular y mostrar el jugador con la mayor cantidad de robos totales.\n"
     "14- Calcular y mostrar el jugador con la mayor cantidad de bloqueos totales.\n"
-    "19-Calcular y mostrar el jugador con la mayor cantidad de temporadas jugadas\n"
+    "15- Permitir al usuario ingresar un valor y mostrar los jugadores que hayan tenido un porcentaje de tiros libres superior a ese valor.\n"
+    #16- Calcular y mostrar el promedio de puntos por partido del equipo excluyendo al jugador con la menor cantidad de puntos por partido.
+    #17- Calcular y mostrar el jugador con la mayor cantidad de logros obtenidos
+    "18- Permitir al usuario ingresar un valor y mostrar los jugadores que hayan tenido un porcentaje de tiros triples superior a ese valor.\n"
+    "19- Calcular y mostrar el jugador con la mayor cantidad de temporadas jugadas\n"
+    #20- Permitir al usuario ingresar un valor y mostrar los jugadores , ordenados por posición en la cancha, que hayan tenido un porcentaje de tiros de campo superior a ese valor.
     
     )
 
@@ -347,7 +353,7 @@ def menu_de_opciones(lista_jugadores:list):
                 calcular_y_mostrar_dato(lista_jugadores, "bloqueos_totales")
                 pass
             elif opcion == "15":
-                busca_jugador_dato(lista_jugadores, "flotante")
+                buscar_jugador_dato(lista_jugadores, "valor_flotante", "porcentaje_tiros_libres")
             elif opcion == "16":
                 calcular_y_mostrar_dato(lista_jugadores, "promedio_puntos")
                 pass
@@ -355,7 +361,7 @@ def menu_de_opciones(lista_jugadores:list):
                 calcular_y_mostrar_dato(lista_jugadores, "logros")
                 pass
             elif opcion == "18":
-                busca_jugador_dato(lista_jugadores, "flotante")
+                buscar_jugador_dato(lista_jugadores, "valor_flotante", "porcentaje_tiros_triples")
             elif opcion == "19":
                 calcular_y_mostrar_dato(lista_jugadores, "temporadas")
                 pass
