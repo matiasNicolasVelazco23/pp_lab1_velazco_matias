@@ -39,6 +39,9 @@ def imprimir_menu():
     "7. Calcular y mostrar el jugador con la mayor cantidad de rebotes totales.\n"
     "8- Calcular y mostrar el jugador con el mayor porcentaje de tiros de campo.\n"
     "9- Calcular y mostrar el jugador con la mayor cantidad de asistencias totales.\n"
+    "10- Permitir al usuario ingresar un valor y mostrar los jugadores que han promediado más puntos por partido que ese valor.\n"
+    "11- Permitir al usuario ingresar un valor y mostrar los jugadores que han promediado más rebotes por partido que ese valor.\n"
+    "12-Permitir al usuario ingresar un valor y mostrar los jugadores que han promediado más asistencias por partido que ese valor.\n"
     "13- Calcular y mostrar el jugador con la mayor cantidad de robos totales.\n"
     "14- Calcular y mostrar el jugador con la mayor cantidad de bloqueos totales.\n"
     "19-Calcular y mostrar el jugador con la mayor cantidad de temporadas jugadas\n"
@@ -109,6 +112,20 @@ def es_entero(string)-> bool:
 
     """
     if re.search(r"^[0-9]+$", string): 
+        return True
+    else:
+        return False
+    
+def es_flotante(string):
+    """Función que verifica si el string es un número flotante válido mediante RegEx.
+    
+    Args:
+        string (str): Cadena a verificar.
+    
+    Returns:
+        bool: True si la cadena es un número flotante válido, False en caso contrario.
+    """
+    if re.match(r"(^[0-9]+)(\.|\,)([0-9]+$)", string):
         return True
     else:
         return False
@@ -216,10 +233,12 @@ def generar_csv_estadisticas_jugador(nombre_archivo: str, lista_jugadores: list,
 # 4)Permitir al usuario buscar un jugador por su nombre y mostrar sus logros, 
 # como campeonatos de la NBA, participaciones en el All-Star y pertenencia al Salón
 # de la Fama del Baloncesto, etc, 
+
+
 #---------------------------------------------------------------------------
 # 5)Calcular y mostrar el promedio de puntos por partido de todo el equipo del Dream Team,
 #  ordenado por nombre de manera ascendente. 
-
+#5 7 8 9 13 14 16 17 19
 def calcular_y_mostrar_dato(lista_jugadores:list,dato:str):
     lista_jugadores_maximos= []
     for indice in range(len(lista_jugadores)):
@@ -239,13 +258,52 @@ def calcular_y_mostrar_dato(lista_jugadores:list,dato:str):
         texto = ","
         palabras_con_coma= texto.join(lista_jugadores_maximos[0:-1])
         cadena_maximos = "{0} y {1}".format(palabras_con_coma,lista_jugadores_maximos[-1])
-    continue
+
+    print("El jugador con el máximo de '{0}' es {1} con un total de {2}.\n".format(dato.replace("_", " "),cadena_maximos,maximo))
+
+def buscar_jugador_dato(lista_jugadores, tipo_valor, dato):
+    respuesta_valida = False
+    if tipo_valor == "valor_flotante":
+        while (respuesta_valida == False):
+            ingresar_flotante_str= input("Ingrese un número: ")
+            print("")
+
+            if es_flotante(ingresar_flotante_str):
+                valor_sanitizado=ingresar_flotante_str.replace(",", ".")
+                ingresar_flotante_float= float(valor_sanitizado)
+                respuesta_valida = True
+
+            elif es_entero(ingresar_flotante_str):
+                ingresar_flotante_float= float(ingresar_flotante_str)
+                respuesta_valida = True
 
 
 
-            
+        encontrar_jugadores_superiores(lista_jugadores, dato, ingresar_flotante_float)
 
-    print("El jugador con el máximo de '{0}' es {1} con un total de {2}\n".format(dato.replace("_", " "),cadena_maximos,maximo))
+
+
+def encontrar_jugadores_superiores(lista_jugadores, dato, maximo):
+    jugadores_superiores = []
+    ningun_superior = False
+    for jugador in lista_jugadores:
+        if jugador["estadisticas"][dato] > maximo:
+            jugadores_superiores.append(jugador["nombre"])
+
+    if len(jugadores_superiores) == 1:
+        cadena_maximos = jugadores_superiores[0]
+    elif len(jugadores_superiores) == 2:
+        cadena_maximos = " y ".join(jugadores_superiores)
+    elif len(jugadores_superiores) > 2:
+        palabras_con_coma = ", ".join(jugadores_superiores[:-1])
+        cadena_maximos = "{0} y {1}".format(palabras_con_coma, jugadores_superiores[-1])
+    else:
+        ningun_superior = True
+
+    if ningun_superior == False:
+        print("Los jugadores que han superado el valor {0} de {1} son: {2}.\n".format(maximo, dato.replace("_", " "),cadena_maximos))
+    else:
+        print("No hay ningún jugador que supere este valor\n")
 
 def menu_de_opciones(lista_jugadores:list):
     flag_se_selecciono = False
@@ -263,12 +321,11 @@ def menu_de_opciones(lista_jugadores:list):
                 else:
                     print("Aún no seleccionaste un índice, vuelve a intentarlo.\n")
             elif opcion == "4":
-                    busca_y_mostrar(lista_jugadores)
+                busca_jugador_dato(lista_jugadores, "string")
             elif opcion == "5":
                 calcular_y_mostrar_dato(lista_jugadores, "promedio_puntos_por_partido")
-                pass
             elif opcion == "6":
-                pass
+                busca_jugador_dato(lista_jugadores, "string")
             elif opcion == "7":
                 calcular_y_mostrar_dato(lista_jugadores, "rebotes_totales")
                 pass
@@ -279,19 +336,18 @@ def menu_de_opciones(lista_jugadores:list):
                 calcular_y_mostrar_dato(lista_jugadores, "asistencias_totales")
                 pass
             elif opcion == "10":
-                pass
+                buscar_jugador_dato(lista_jugadores, "valor_flotante", "promedio_puntos_por_partido")
             elif opcion == "11":
-                pass
+                buscar_jugador_dato(lista_jugadores, "valor_flotante", "promedio_rebotes_por_partido")
             elif opcion == "12":
-                pass
+                buscar_jugador_dato(lista_jugadores, "valor_flotante", "promedio_asistencias_por_partido")
             elif opcion == "13":
                 calcular_y_mostrar_dato(lista_jugadores, "robos_totales")
-                pass
             elif opcion == "14":
                 calcular_y_mostrar_dato(lista_jugadores, "bloqueos_totales")
                 pass
             elif opcion == "15":
-                pass
+                busca_jugador_dato(lista_jugadores, "flotante")
             elif opcion == "16":
                 calcular_y_mostrar_dato(lista_jugadores, "promedio_puntos")
                 pass
@@ -299,12 +355,12 @@ def menu_de_opciones(lista_jugadores:list):
                 calcular_y_mostrar_dato(lista_jugadores, "logros")
                 pass
             elif opcion == "18":
-                pass
+                busca_jugador_dato(lista_jugadores, "flotante")
             elif opcion == "19":
                 calcular_y_mostrar_dato(lista_jugadores, "temporadas")
                 pass
             elif opcion == "20":
-                pass
+                busca_jugador_dato(lista_jugadores, "flotante")
             
             else:
                 print("Opcion inválida")
