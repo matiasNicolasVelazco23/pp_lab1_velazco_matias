@@ -181,9 +181,9 @@ def hay_coincidencia_inexacta(nombre_ingresado:str, lista_jugadores:list)->list:
 
     Returns:
         list: Retorna una lista, que incluye los valores de nombres, seguidos de sus logros, 
-        en pares de 2.
+        en pares de a 2 Ej[Nombre,logros,nombre,logros...].
     """
-    patron = r'({0})+'.format(nombre_ingresado.lower())
+    patron = r'.*{0}.*'.format(nombre_ingresado.lower())
     jugadores_coincidentes = []
     for jugador in lista_jugadores:
         nombre_jugador = jugador["nombre"].lower()
@@ -250,8 +250,7 @@ def selecciona_jugador_por_indice(lista_jugadores: list)-> int:
         lista_jugadores (list): Recibe la lista de diccionarios de jugadores.
 
     Returns:
-        Retorna el diccionario deL jugador seleccionado por índice
-        y verificado previamente
+        Retorna el número del índice seleccionado, para usar luego.
     """
     indice_validado=verificar_input(lista_jugadores)
 
@@ -269,10 +268,9 @@ def generar_csv_estadisticas_jugador(nombre_archivo: str, lista_jugadores: list,
        primero itera  cada clave, en el índice seleccionado de la lista, luego
        verifica si la clave es "estadistica", esto no sucede hasta que llega a esa
        clave, escribe en el csv los valores de las claves "nombre" y "posición",
-       hasta que llega a la clave estadísticas, allí, escribo en el csv utilizando
-       el retorno de la función iterar estadisticas, finalmente, cuando termina
-       de ejecutarse esa función realizo un break para que no siga escribiendo las claves restantes
-       (el ejercico no lo pide)
+       cuando llega al punto mencionado, escribe los nombre de las claves dentro de estadísticas
+       en la siguiente estructura repetitiva, hacemos el mismo proceso pero accediendo a las claves
+       mediante los elementos que iteramos.
 
     Args:
         nombre_archivo (str): nombre del archivo, el título está definido por el nombre del jugador
@@ -315,18 +313,18 @@ def generar_csv_estadisticas_jugador(nombre_archivo: str, lista_jugadores: list,
                 
             
             
-    
-#----------------------------------------------------------------------------
-# 4)Permitir al usuario buscar un jugador por su nombre y mostrar sus logros, 
-# como campeonatos de la NBA, participaciones en el All-Star y pertenencia al Salón
-# de la Fama del Baloncesto, etc, 
 
 
 #---------------------------------------------------------------------------
-# 5)Calcular y mostrar el promedio de puntos por partido de todo el equipo del Dream Team,
-#  ordenado por nombre de manera ascendente. 
-#5 7 8 9 13 14 16 17 19
+
 def calcular_y_mostrar_dato(lista_jugadores:list,dato:str):
+    """
+
+
+    Args:
+        lista_jugadores (list): _description_
+        dato (str): _description_
+    """
     lista_jugadores_maximos= []
     for indice in range(len(lista_jugadores)):
         if indice == 0 or lista_jugadores[indice]["estadisticas"][dato] > maximo:
@@ -393,14 +391,6 @@ def buscar_jugador_dato(lista_jugadores, tipo_valor, dato):
             
             else: 
                 print("Nombre inválido")
-
-    
-
-
-
-        
-
-
 
 def encontrar_jugadores_superiores(lista_jugadores, dato, maximo):
     jugadores_superiores = []
