@@ -37,7 +37,11 @@ def imprimir_dato(dato : str) -> None:
     print(dato)
 
 def imprimir_menu():
+    """
+    Función que imprime el menú, todo el texto es guardado en la variable menú.
 
+    No devuelve nada
+    """
     menu = (
     "1. Mostrar la lista de todos los jugadores del Dream Team.\n"
     "2. Seleccionar un jugador por su índice y mostrar sus estadísticas"
@@ -425,7 +429,8 @@ def calcular_y_mostrar_dato(lista_jugadores:list,dato:str) -> None:
         lista_jugadores_ordenados_quick = quick_sort(lista_jugadores_ordenados, True)
         separador_lista_jugadores_ordenados_quick = "\n"
         lista_jugadores_ordenados_quick_join = separador_lista_jugadores_ordenados_quick.join(lista_jugadores_ordenados_quick)
-        print("El promedio de puntos por partido del Dream Team es:{0}\nOrden ascendente por orden alfabético del promedio puntos por partido:\n{1}".format(promedio_acumulador_promedio_puntos,lista_jugadores_ordenados_quick_join))
+        print("El promedio de puntos por partido del Dream Team es:{0}\nOrden ascendente por orden alfabético del promedio puntos por partido:\n{1}".format(promedio_acumulador_promedio_puntos,
+                                                                                                                                                            lista_jugadores_ordenados_quick_join))
 
     else:
         lista_jugadores_maximos= []
