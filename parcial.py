@@ -69,7 +69,7 @@ def opciones_menu_principal():
     """
     No recibe nada
     Se encarga de imprimir el menu de opciones y pedirle al usuario una opcion de entre todas
-    validando la opcion y la retorna si da error retorna -1
+    validando la opcion  mediante RegEx y la retorna, si da error retorna -1.
     """
     imprimir_menu()
     opcion = input("Elija una opcion: ")
@@ -162,7 +162,16 @@ def es_texto(string):
     else:
         return False
     
-def es_miembro_salon(logros):
+def es_miembro_salon(logros:str)-> bool:
+    """
+        Función que revisa si la cadena ingresada contiene exactamente la expresión
+        "Miembro del Salon de la Fama del Baloncesto".
+    Args:
+        logros (str): texto a evaluar
+
+    Returns:
+        bool: retorna true si encuentra el patrón y false si no lo hace.
+    """
     patron = r'\bMiembro del Salon de la Fama del Baloncesto\b'
     if re.search(patron, logros):
         return True
@@ -240,7 +249,8 @@ def iterar_estadisticas(lista_jugadores: list, indice_validado: int) -> str:
         datos = "{0}: {1}\n".format(clave.capitalize().replace("_", " "), valor)
         mensaje += datos
     return mensaje
-    
+
+#----------------------------------------------------------------------------  
 def selecciona_jugador_por_indice(lista_jugadores: list)-> int:
     """_summary_
         Función que  selecciona un jugador mediante el índice ingresado,
@@ -249,7 +259,7 @@ def selecciona_jugador_por_indice(lista_jugadores: list)-> int:
         lista_jugadores (list): Recibe la lista de diccionarios de jugadores.
 
     Returns:
-        Retorna el número del índice seleccionado, para usar luego.
+        int: Retorna el número del índice seleccionado, para usar luego.
     """
     indice_validado=verificar_input(lista_jugadores)
 
@@ -258,8 +268,6 @@ def selecciona_jugador_por_indice(lista_jugadores: list)-> int:
 
     return indice_validado
 
-#----------------------------------------------------------------------------
-#3)
 #----------------------------------------------------------------------------
 def generar_csv_estadisticas_jugador(nombre_archivo: str, lista_jugadores: list, indice_seleccionado: int)-> None:
     """
@@ -312,6 +320,19 @@ def generar_csv_estadisticas_jugador(nombre_archivo: str, lista_jugadores: list,
                 
             
 def quick_sort(lista_original:list, flag_orden:bool) -> list:
+    """
+        Función que ordena generando sublistas, separándola de izquierda y derecha
+        según si es mayor o menor al pivot, el pivot va cambiando dependiendo la lista
+        que llega en la recursividad, los elementos y el tamaño de las listas también
+        hasta que queda una lista igual a 1 (también contempla el caso en el que llegue)
+        una lista vacía, finalmente ordena según la especificación pasada por booleano.
+    Args:
+        lista_original (list): listas generadas en las funciones, en los casos de ordenar.
+        flag_orden (bool): valor que detalla si el orden es ascendente o descendente
+
+    Returns:
+        list: retorna la lista izquierda o la derecha, dependiendo del orden seleccionado
+    """
     lista_de = []  # Lista para almacenar los elementos mayores al pivote
     lista_iz = []  # Lista para almacenar los elementos menores o iguales al pivote
 
@@ -349,8 +370,16 @@ def quick_sort(lista_original:list, flag_orden:bool) -> list:
         
         lista_de.extend(lista_iz)  # Combina las listas ordenadas de la derecha e izquierda
         return lista_de  # Devuelve la lista ordenada de manera descendente
-
-def calcular_mostrar_promedio_menos_ultimo (lista_jugadores, dato):
+#-----------------------------------------------------------------------------------------
+def calcular_mostrar_promedio_menos_ultimo (lista_jugadores :list, dato : str) -> None:
+    """
+        Función que calcula el promedio de el dream team exceptuando el último
+    Args:
+        lista_jugadores (list): lista de jugadores para acceder a sus datos
+        dato (str): dato especifico para acceder al valor 
+    
+    Returns: La función no devuelve nada
+    """
     lista_jugadores_menos_ultimo= lista_jugadores[:-1]
     acumulador_promedio_puntos_por_partido_menos_ultimo = 0
     for indice in range(len(lista_jugadores_menos_ultimo)):
@@ -360,13 +389,16 @@ def calcular_mostrar_promedio_menos_ultimo (lista_jugadores, dato):
     print("El promedio de puntos por partido del Dream Team menos el últmo es:{0}".format(promedio_acumulador_promedio_puntos))
 
 #---------------------------------------------------------------------------
-def calcular_y_mostrar_dato(lista_jugadores:list,dato:str):
+def calcular_y_mostrar_dato(lista_jugadores:list,dato:str) -> None:
     """
-
+        Función para calcular y mostrar el dato, según el dato especificado
 
     Args:
-        lista_jugadores (list): _description_
-        dato (str): _description_
+        lista_jugadores (list): la lista de jugadores para acceder al dato
+        dato (str): el dato para acceder al valor
+
+    Returns:
+        La función no devuelve nada
     """
     if dato == "logros":
         lista_jugadores_con_logros_maximo = []
@@ -407,23 +439,43 @@ def calcular_y_mostrar_dato(lista_jugadores:list,dato:str):
                 lista_jugadores_maximos.append(lista_jugadores[indice]["nombre"])
         formato_cadena_maximos(lista_jugadores_maximos,dato,maximo)
 
-
-def formato_cadena_maximos(lista,dato,maximo):
-        if len(lista) == 1:
-            cadena_maximos = lista[0]
-        elif len(lista) == 2:
-            texto = " y "
-            cadena_maximos=texto.join(lista)
-        else:
-            texto = ","
-            palabras_con_coma= texto.join(lista[0:-1])
-            cadena_maximos = "{0} y {1}".format(palabras_con_coma,lista[-1])
-
-        print("El jugador con el máximo de '{0}' es {1} con un total de {2}.\n".format(dato.replace("_", " "),cadena_maximos,maximo))
-
-
+def formato_cadena_maximos(lista:list,dato:str,maximo:int) -> None:
+    """
+        Función para darle un formato a las cadenas dependiendo el tamaño de la lista.
+    Args:
+        lista (list): lista a darle formato.
+        dato (str): dato especificado para poner en el print.
+        maximo (int): maximo especificado para poner en el print.
     
-def buscar_jugador_dato(lista_jugadores, tipo_valor, dato):
+    Returns:
+        No devuelve nada.
+    """
+    if len(lista) == 1:
+        cadena_maximos = lista[0]
+    elif len(lista) == 2:
+        texto = " y "
+        cadena_maximos=texto.join(lista)
+    else:
+        texto = ","
+        palabras_con_coma= texto.join(lista[0:-1])
+        cadena_maximos = "{0} y {1}".format(palabras_con_coma,lista[-1])
+
+    print("El jugador con el máximo de '{0}' es {1} con un total de {2}.\n".format(dato.replace("_", " "),cadena_maximos,maximo))
+    
+def buscar_jugador_dato(lista_jugadores:list, tipo_valor:str, dato:str) -> str:
+    """
+        Función que busca los datos de un jugador según el valor ingresado por input
+        se verifica en cada if si el valor es válido, imprime por pantalla la mayoría
+        salvo que se trate del dato logros, en ese caso, retorna un string para usar en el menú
+    Args:
+        lista_jugadores (list): lista de jugadores para acceder al dato
+        tipo_valor (str): tipo de valor a verificar y que quiero que el usuario ingrese
+        dato (str): dato para acceder a la clave en el diccionario estadisticas o, en su defencto, la clave
+        del diccionario del jugador, en específico, sus logros
+
+    Returns:
+        str: devuelve un string que contiene los logros y el nombre del jugador
+    """
     respuesta_valida = False
     if tipo_valor == "valor_flotante":
         while (respuesta_valida == False):
@@ -442,10 +494,21 @@ def buscar_jugador_dato(lista_jugadores, tipo_valor, dato):
             else:
                 print("Número inválido")
         
-        if dato_
-        
+        if dato == "porcentaje_tiros_de_campo":
+                lista_jugadores_ordenados_porcentaje_puntos_campo = []
+                for indice in range(len(lista_jugadores)):
+                    posicion_promedio_porcentaje_puntos_campo=lista_jugadores[indice]["posicion"]
+                    nombre_promedio_porcentaje_puntos_campo=lista_jugadores[indice]["nombre"]
+                    valor_promedio_porcentaje_puntos_campo=lista_jugadores[indice]["estadisticas"][dato]
+                    datos_juntos_porcentaje_puntos_campo= "{0}|{1} : {2}".format(posicion_promedio_porcentaje_puntos_campo,nombre_promedio_porcentaje_puntos_campo, valor_promedio_porcentaje_puntos_campo)  
+                    lista_jugadores_ordenados_porcentaje_puntos_campo.append(datos_juntos_porcentaje_puntos_campo)
+                lista_jugadores_ordenados_porcentaje_puntos__campo_quick= quick_sort(lista_jugadores_ordenados_porcentaje_puntos_campo, True)
+                separador_lista_jugadores_ordenados__porcentajes_puntos_campo_quick = "\n"
+                lista_jugadores_ordenados_porcentajes_puntos_campo_quick_join = separador_lista_jugadores_ordenados__porcentajes_puntos_campo_quick.join(lista_jugadores_ordenados_porcentaje_puntos__campo_quick)
+                print(lista_jugadores_ordenados_porcentajes_puntos_campo_quick_join)
+
         else:
-        encontrar_jugadores_superiores(lista_jugadores, dato, ingresar_flotante_float)
+            encontrar_jugadores_superiores(lista_jugadores, dato, ingresar_flotante_float)
 
     elif tipo_valor == "nombre":
          while (respuesta_valida == False):
@@ -472,7 +535,16 @@ def buscar_jugador_dato(lista_jugadores, tipo_valor, dato):
                 print("Nombre inválido")
 
 
-def encontrar_jugadores_superiores(lista_jugadores, dato, maximo):
+def encontrar_jugadores_superiores(lista_jugadores:list, dato:str, maximo:str):
+    """
+        Función que agrega los jugadores que superen el máximo definido previamente
+        luego, formatea un mensaje según el tamaño de la lista de jugadores que superen
+        ese valor
+    Args:
+        lista_jugadores (list): la lista de jugadores
+        dato (str): el dato, para guardar el nombre de quienes tengan un dato que supere el máximo
+        maximo (str): el máximo, definido previamente fuera de la función
+    """
     jugadores_superiores = []
     ningun_superior = False
     for jugador in lista_jugadores:
@@ -546,12 +618,10 @@ def menu_de_opciones(lista_jugadores:list):
                 calcular_y_mostrar_dato(lista_jugadores, "robos_totales")
             elif opcion == "14":
                 calcular_y_mostrar_dato(lista_jugadores, "bloqueos_totales")
-                pass
             elif opcion == "15":
                 buscar_jugador_dato(lista_jugadores, "valor_flotante", "porcentaje_tiros_libres")
             elif opcion == "16":
                 calcular_mostrar_promedio_menos_ultimo(lista_jugadores, "promedio_puntos_por_partido")
-                pass
             elif opcion == "17":
                 calcular_y_mostrar_dato(lista_jugadores, "logros")
 
@@ -559,9 +629,8 @@ def menu_de_opciones(lista_jugadores:list):
                 buscar_jugador_dato(lista_jugadores, "valor_flotante", "porcentaje_tiros_triples")
             elif opcion == "19":
                 calcular_y_mostrar_dato(lista_jugadores, "temporadas")
-                pass
             elif opcion == "20":
-                pass
+                buscar_jugador_dato(lista_jugadores, "valor_flotante", "porcentaje_tiros_de_campo")
             
             else:
                 print("Opcion inválida")
