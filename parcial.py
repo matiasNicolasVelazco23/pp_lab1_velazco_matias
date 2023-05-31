@@ -47,9 +47,9 @@ def imprimir_menu():
     "2. Seleccionar un jugador por su índice y mostrar sus estadísticas"
     "completas\n"
     "3. Guardar las estadísticas de ese jugador en un archivo CSV.\n" 
-    "4. Buscar un jugador por su nombre y mostrar sus logros\n"
-    "5. Calcular y mostrar el promedio de puntos por partido de todo el equipo\n"
-    "6.Permitir al usuario ingresar el nombre de un jugador y mostrar si ese jugador es miembro del Salón de la Fama del Baloncesto.\n"
+    "4. Buscar un jugador por su nombre y mostrar sus logros.\n"
+    "5. Calcular y mostrar el promedio de puntos por partido de todo el equipo ordenado por nombre de manera ascendente.\n"
+    "6. Permitir al usuario ingresar el nombre de un jugador y mostrar si ese jugador es miembro del Salón de la Fama del Baloncesto.\n"
     "7. Calcular y mostrar el jugador con la mayor cantidad de rebotes totales.\n"
     "8- Calcular y mostrar el jugador con el mayor porcentaje de tiros de campo.\n"
     "9- Calcular y mostrar el jugador con la mayor cantidad de asistencias totales.\n"
@@ -64,6 +64,12 @@ def imprimir_menu():
     "18- Permitir al usuario ingresar un valor y mostrar los jugadores que hayan tenido un porcentaje de tiros triples superior a ese valor.\n"
     "19- Calcular y mostrar el jugador con la mayor cantidad de temporadas jugadas\n"
     "20- Permitir al usuario ingresar un valor y mostrar los jugadores , ordenados por posición en la cancha, que hayan tenido un porcentaje de tiros de campo superior a ese valor.\n"
+    "23- Permitir al usuario ingresar un valor y mostrar los jugadores , ordenados por posición en la cancha, que hayan tenido un porcentaje de tiros de campo superior a ese valor.\n"
+    "24- Determinar la cantidad de jugadores que hay por cada posición.\n"
+    "25- Determinar la cantidad de jugadores que hay por cada posición.\n"
+    "26- Determinar qué jugador tiene las mejores estadísticas en cada valor.\n"
+    "27- Determinar qué jugador tiene las mejores estadísticas de todos.\n"
+
     
     )
 
@@ -78,11 +84,12 @@ def opciones_menu_principal():
     imprimir_menu()
     opcion = input("Elija una opcion: ")
     print("")
-    if re.search(r"[1-9]|1[1-9]|20|", opcion):
+    if re.match(r"[1-9]|1[1-9]|20|23|24|25|26|27", opcion): #*
         return opcion
     else:
         return -1
 #1--------------------------------------------------------------------------1
+#1 - 2
 def mostrar_lista_jugadores(lista_jugadores:list, formato:bool)-> None:
     """
         En cada bucle del for accede  a cada diccionario individual 
@@ -129,7 +136,7 @@ def es_entero(string)-> bool:
         (ser entero)
 
     """
-    if re.search(r"^[0-9]+$", string): 
+    if re.search(r"^[0-9]+$", string):  #*
         return True
     else:
         return False
@@ -273,6 +280,7 @@ def selecciona_jugador_por_indice(lista_jugadores: list)-> int:
     return indice_validado
 
 #----------------------------------------------------------------------------
+#3
 def generar_csv_estadisticas_jugador(nombre_archivo: str, lista_jugadores: list, indice_seleccionado: int)-> None:
     """
        Función que genera un csv del jugador seleccionado en el punto 2, 
@@ -384,13 +392,40 @@ def calcular_mostrar_promedio_menos_ultimo (lista_jugadores :list, dato : str) -
     
     Returns: La función no devuelve nada
     """
-    lista_jugadores_menos_ultimo= lista_jugadores[:-1]
-    acumulador_promedio_puntos_por_partido_menos_ultimo = 0
-    for indice in range(len(lista_jugadores_menos_ultimo)):
-        acumulador_promedio_puntos_por_partido_menos_ultimo+=lista_jugadores[indice]["estadisticas"][dato]
-        promedio_acumulador_promedio_puntos = acumulador_promedio_puntos_por_partido_menos_ultimo / len(lista_jugadores_menos_ultimo)
+    lista_valores_nombre_promedio_puntos = []
+    for indice in range(len(lista_jugadores)):
+        nombre_promedio_puntos = lista_jugadores[indice]["nombre"]
+        valor_promedio_puntos = lista_jugadores[indice]["estadisticas"][dato]
+        datos_promedio_puntos = "{0} | {1}".format(valor_promedio_puntos, nombre_promedio_puntos)
+        lista_valores_nombre_promedio_puntos.append(datos_promedio_puntos)
+    lista_valores_nombre_promedio_puntos_quick = quick_sort(lista_valores_nombre_promedio_puntos, False)
+    menor_promedio = lista_valores_nombre_promedio_puntos_quick[0]
+    separador_menor_promedio = "|"
+    menor_promedio_split = menor_promedio.split(separador_menor_promedio)
+    menor_promedio_split_numero_string = menor_promedio_split[0]
+    menor_promedio_split_numero_flotante = float(menor_promedio_split_numero_string)
+    
+    acumulador_promedio_puntos = 0
+    for indice in range(len(lista_jugadores)):
+        if lista_jugadores[indice]["estadisticas"][dato] == menor_promedio_split_numero_flotante:
+            reducir_rango = len(lista_jugadores) -1
 
-    print("El promedio de puntos por partido del Dream Team menos el últmo es:{0}".format(promedio_acumulador_promedio_puntos))
+        else: 
+            acumulador_promedio_puntos  +=  lista_jugadores[indice]["estadisticas"][dato]
+    promedio = acumulador_promedio_puntos/reducir_rango
+    print("{0}".format(promedio))
+
+
+        
+
+        
+    # lista_jugadores_menos_ultimo= lista_jugadores[:-1]
+    # acumulador_promedio_puntos_por_partido_menos_ultimo = 0
+    # for indice in range(len(lista_jugadores_menos_ultimo)):
+    #     acumulador_promedio_puntos_por_partido_menos_ultimo+=lista_jugadores[indice]["estadisticas"][dato]
+    #     promedio_acumulador_promedio_puntos = acumulador_promedio_puntos_por_partido_menos_ultimo / len(lista_jugadores_menos_ultimo)
+
+    # print("El promedio de puntos por partido del Dream Team menos el últmo es:{0}".format(promedio_acumulador_promedio_puntos))
 
 #---------------------------------------------------------------------------
 def calcular_y_mostrar_dato(lista_jugadores:list,dato:str) -> None:
@@ -535,6 +570,7 @@ def buscar_jugador_dato(lista_jugadores:list, tipo_valor:str, dato:str) -> str:
   
                 else:
                     print("El texto ingresado no coincide con ningún jugador")
+                
             
             else: 
                 print("Nombre inválido")
@@ -570,6 +606,142 @@ def encontrar_jugadores_superiores(lista_jugadores:list, dato:str, maximo:str):
         print("Los jugadores que han superado el valor {0} de {1} son: {2}.\n".format(maximo, dato.replace("_", " "),cadena_maximos))
     else:
         print("No hay ningún jugador que supere este valor.\n")
+
+def ordenar_dato(lista_jugadores:list,dato:str)-> list:
+    """
+       Función que ordena cada lista enviada
+
+    Args:
+        lista_jugadores (list): la lista de jugadores
+        dato (str): el dato a ordenar
+
+    Returns:
+        list: la lista ordenada de cada dato
+    """
+    lista_dato = []
+    for indice in range(len(lista_jugadores)):
+        lista_dato.append(lista_jugadores[indice]["estadisticas"][dato])
+    lista_dato_quick = quick_sort(lista_dato,False)
+    return lista_dato_quick
+
+def mostrar_posicion_segun_estadistica(lista_jugadores:list,tipo:str)-> str:
+    """
+        Función que muestra el ranking de cada dato de la lista de jugadores
+    Args:
+        lista_jugadores (list): la lista de jugadores
+        tipo(str):   dependiendo del ejercicio
+
+    Return: devuelve el ranking o el total de rankings acumuladors de cada jugador
+    """
+    dato_ordenado_puntos=ordenar_dato(lista_jugadores,"puntos_totales")
+    dato_ordenado_rebotes=ordenar_dato(lista_jugadores,"rebotes_totales")
+    dato_ordenado_asistencias=ordenar_dato(lista_jugadores,"asistencias_totales")
+    dato_ordenado_robos=ordenar_dato(lista_jugadores,"robos_totales")
+    acumulador_de_rankings = ""
+    acumulador_de_datos= ""
+    flag_encabezado = True
+    
+    for jugador in lista_jugadores:
+
+        nombre_mostrar_pos = jugador["nombre"]
+        if jugador["estadisticas"]["puntos_totales"] in dato_ordenado_puntos:
+            indice_puntos = dato_ordenado_puntos.index(jugador["estadisticas"]["puntos_totales"]) + 1
+            indice_puntos_texto = str(indice_puntos)
+        if jugador["estadisticas"]["rebotes_totales"] in dato_ordenado_rebotes:
+            indice_rebotes = dato_ordenado_rebotes.index(jugador["estadisticas"]["rebotes_totales"]) + 1
+            indice_rebotes_texto = str(indice_rebotes)
+        if jugador["estadisticas"]["asistencias_totales"] in dato_ordenado_asistencias:
+            indice_asistencias = dato_ordenado_asistencias.index(jugador["estadisticas"]["asistencias_totales"]) + 1
+            indice_asistencias_texto= str(indice_asistencias)
+        if jugador["estadisticas"]["robos_totales"] in dato_ordenado_robos:
+            indice_robos_totales= dato_ordenado_robos.index(jugador["estadisticas"]["robos_totales"]) + 1
+            indice_robos_totales_texto = str(indice_robos_totales)
+        suma_rankings_cada_jugador = indice_puntos+indice_rebotes+indice_asistencias+indice_robos_totales
+        suma_rankings_cada_jugador_texto = str(suma_rankings_cada_jugador)
+        acumulador_de_rankings+= "{0} {1}\n".format(suma_rankings_cada_jugador_texto, jugador["nombre"])
+        todos_los_datos="{0}|{1}|{2}|{3}|{4}\n".format(nombre_mostrar_pos.ljust(20), indice_puntos_texto.ljust(6), indice_rebotes_texto.ljust(8), indice_asistencias_texto.ljust(11), indice_robos_totales_texto.ljust(5))
+        acumulador_de_datos+= todos_los_datos  
+
+    if tipo == "mostrar_ranking":
+        print("{0}|{1}|{2}|{3}|{4}".format("Nombre".ljust(20),"Puntos".ljust(6), "Rebotes".ljust(8), "Asistencias".ljust(11), "Robos".ljust(5)))
+
+        return acumulador_de_datos
+    else:
+        return acumulador_de_rankings
+def contar_posicion(lista_jugadores:list):
+    """
+        Función que cuenta la cantidad de jugadores en cad posición
+    Args:
+        lista_jugadores (list): _description_
+    """
+    contador_escolta= 0
+    contador_base= 0
+    contador_ala_pivot = 0
+    contador_alero = 0
+    contador_pivot = 0
+    for indice in range(len(lista_jugadores)):
+        if lista_jugadores[indice]["posicion"] == "Escolta":
+            contador_escolta += 1
+        if lista_jugadores[indice]["posicion"] == "Base":
+                contador_base += 1
+        if lista_jugadores[indice]["posicion"] == "Ala-Pivot":
+                contador_ala_pivot += 1
+        if lista_jugadores[indice]["posicion"] == "Alero":
+                contador_alero += 1
+        if lista_jugadores[indice]["posicion"] == "Pivot":
+                contador_pivot += 1
+    print("Cantidad de jugadores en cada posición: ")
+    print("Escolta: {0}".format(contador_escolta))
+    print("Base: {0}".format(contador_base))
+    print("Ala-Pivot: {0}".format(contador_ala_pivot))
+    print("Alero: {0}".format(contador_alero))
+    print("Pivot: {0}".format(contador_pivot))
+
+def veces_all_star_ordenado(lista_jugadores):
+    for indice in range(len(lista_jugadores)):
+        print(lista_jugadores[indice]["logros"])
+        patron= re.search(r'[1-9]+ veces All-Star')
+
+        if patron in lista_jugadores[indice]["logros"]:
+            print("{0}".format(lista_jugadores[indice]['nombre']))
+
+# Determinar qué jugador tiene las mejores estadísticas en cada valor. La salida por pantalla debe tener un formato similar a este:
+# Mayor cantidad de temporadas: Karl Malone (19)
+# Mayor cantidad de puntos totales: Karl Malon (36928)
+def maximo_cada_dato(lista_jugadores, dato):
+        lista_jugadores_maximos= []
+        for indice in range(len(lista_jugadores)):
+            if indice == 0 or lista_jugadores[indice]["estadisticas"][dato] > maximo_individual:
+                maximo_individual = lista_jugadores[indice]["estadisticas"][dato]
+
+
+        for indice in range(len(lista_jugadores)):
+            if lista_jugadores[indice]["estadisticas"][dato] == maximo_individual:
+                lista_jugadores_maximos.append(lista_jugadores[indice]["nombre"])
+        formato_maximos(lista_jugadores_maximos,dato,maximo_individual)
+
+def formato_maximos(lista:list,dato:str,maximo:int) -> None:
+    """
+        Función para darle un formato a las cadenas dependiendo el tamaño de la lista.
+    Args:
+        lista (list): lista a darle formato.
+        dato (str): dato especificado para poner en el print.
+        maximo (int): maximo especificado para poner en el print.
+    
+    Returns:
+        No devuelve nada.
+    """
+    if len(lista) == 1:
+        cadena_maximos = lista[0]
+    elif len(lista) == 2:
+        texto = " y "
+        cadena_maximos=texto.join(lista)
+    else:
+        texto = ","
+        palabras_con_coma= texto.join(lista[0:-1])
+        cadena_maximos = "{0} y {1}".format(palabras_con_coma,lista[-1])
+
+    print("Mayor cantidad de {0}: {1} ({2})\n".format(dato.replace("_", " "),cadena_maximos,maximo))
 
 
 def menu_de_opciones(lista_jugadores:list):
@@ -636,7 +808,38 @@ def menu_de_opciones(lista_jugadores:list):
                 calcular_y_mostrar_dato(lista_jugadores, "temporadas")
             elif opcion == "20":
                 buscar_jugador_dato(lista_jugadores, "valor_flotante", "porcentaje_tiros_de_campo")
-            
+            elif opcion == "23":
+                ranking=mostrar_posicion_segun_estadistica(lista_jugadores,"mostrar_ranking")
+                print(ranking)
+            elif opcion == "24":
+                contar_posicion(lista_jugadores)
+            elif opcion == "25":
+                pass
+                #veces_all_star_ordenado(lista_jugadores)
+            elif opcion == "26":
+                maximo_cada_dato(lista_jugadores,"temporadas" )
+                maximo_cada_dato(lista_jugadores,"puntos_totales" )
+                maximo_cada_dato(lista_jugadores,"promedio_puntos_por_partido")
+                maximo_cada_dato(lista_jugadores,"rebotes_totales")
+                maximo_cada_dato(lista_jugadores,"promedio_rebotes_por_partido")
+                maximo_cada_dato(lista_jugadores,"asistencias_totales")
+                maximo_cada_dato(lista_jugadores,"promedio_asistencias_por_partido")
+                maximo_cada_dato(lista_jugadores,"robos_totales")
+                maximo_cada_dato(lista_jugadores,"bloqueos_totales")
+                maximo_cada_dato(lista_jugadores,"porcentaje_tiros_de_campo")
+                maximo_cada_dato(lista_jugadores,"porcentaje_tiros_libres")
+                maximo_cada_dato(lista_jugadores,"porcentaje_tiros_triples")
+
+            elif opcion == "27":
+                cada_jugador_total_ranking=mostrar_posicion_segun_estadistica(lista_jugadores,"mostrar_maximo")
+                separador_ranking = "\n"
+                cada_jugador_total_ranking_split= cada_jugador_total_ranking.split(separador_ranking)
+                cada_jugador_total_ranking_split_quick= quick_sort(cada_jugador_total_ranking_split,True)
+                cada_jugador_total_ranking_split_quick_menos_primero= cada_jugador_total_ranking_split_quick[1:]
+                cada_jugador_total_ranking_split_quick_menos_primero_mejor_jugador=cada_jugador_total_ranking_split_quick_menos_primero[1]
+                cada_jugador_total_ranking_split_quick_menos_primero_mejor_jugador_split=cada_jugador_total_ranking_split_quick_menos_primero_mejor_jugador.split(" ")
+
+                print("El mejor jugador es {0}".format(cada_jugador_total_ranking_split_quick_menos_primero_mejor_jugador_split[1]))
             else:
                 print("Opcion inválida")
             clear_console()
