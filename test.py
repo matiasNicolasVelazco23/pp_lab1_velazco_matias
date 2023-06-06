@@ -831,8 +831,21 @@ def menu_de_opciones(lista_jugadores:list):
             elif opcion == "24":
                 contar_posicion(lista_jugadores)
             elif opcion == "25":
-                pass
-                # veces_all_star_lista=veces_all_star_ordenado(lista_jugadores)
+                veces_all_star_lista=veces_all_star_ordenado(lista_jugadores)
+                lista_cantidad_all_stars = []
+                for elemento in veces_all_star_lista:
+                    elemento_split = elemento.split(" ")
+                    lista_cantidad_all_stars.append(elemento_split[0])
+                lista_cantidad_all_stars_int = []
+                for elemento in lista_cantidad_all_stars:
+                    elemento_int = int(elemento)
+                    lista_cantidad_all_stars_int.append(elemento_int)
+
+                lista_cantidad_all_stars_int_quick= quick_sort(lista_cantidad_all_stars_int,False) 
+                print(veces_all_star_lista)
+                print(lista_cantidad_all_stars_int_quick)
+
+
                 # veces_all_star_lista_ordenada= quick_sort(veces_all_star_lista,True)
                 # print(veces_all_star_lista_ordenada)
             elif opcion == "26":
@@ -857,10 +870,8 @@ def menu_de_opciones(lista_jugadores:list):
                 cada_jugador_total_ranking_split_quick_menos_primero= cada_jugador_total_ranking_split_quick[1:]
                 cada_jugador_total_ranking_split_quick_menos_primero_mejor_jugador=cada_jugador_total_ranking_split_quick_menos_primero[1]
                 cada_jugador_total_ranking_split_quick_menos_primero_mejor_jugador_split=cada_jugador_total_ranking_split_quick_menos_primero_mejor_jugador.split(" ")
-                print(cada_jugador_total_ranking_split_quick_menos_primero_mejor_jugador)
-                print(cada_jugador_total_ranking_split_quick_menos_primero_mejor_jugador_split)
 
-                print("El mejor jugador es {0} {1}".format(cada_jugador_total_ranking_split_quick_menos_primero_mejor_jugador_split[1], cada_jugador_total_ranking_split_quick_menos_primero_mejor_jugador_split[2]))
+                print("El mejor jugador es {0}".format(cada_jugador_total_ranking_split_quick_menos_primero_mejor_jugador_split[1]))
             else:
                 print("Opcion inválida")
             clear_console()
