@@ -857,8 +857,6 @@ def menu_de_opciones(lista_jugadores:list):
                 cada_jugador_total_ranking_split_quick_menos_primero= cada_jugador_total_ranking_split_quick[1:]
                 cada_jugador_total_ranking_split_quick_menos_primero_mejor_jugador=cada_jugador_total_ranking_split_quick_menos_primero[1]
                 cada_jugador_total_ranking_split_quick_menos_primero_mejor_jugador_split=cada_jugador_total_ranking_split_quick_menos_primero_mejor_jugador.split(" ")
-                print(cada_jugador_total_ranking_split_quick_menos_primero_mejor_jugador)
-                print(cada_jugador_total_ranking_split_quick_menos_primero_mejor_jugador_split)
 
                 print("El mejor jugador es {0} {1}".format(cada_jugador_total_ranking_split_quick_menos_primero_mejor_jugador_split[1], cada_jugador_total_ranking_split_quick_menos_primero_mejor_jugador_split[2]))
             else:
